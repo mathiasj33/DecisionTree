@@ -19,7 +19,7 @@ public:
     Dataset(LoadedDataset& loadedDataset);
     void add(const DataItem* item, const int* label);
     float calculateGiniIndex() const;
-    std::unique_ptr<std::vector<Dataset>> splitOnFeature(std::string feature) const;
+    std::vector<Dataset> splitOnFeature(const std::string& feature) const;
     int majorityVote() const;
     bool allSameLabel() const;
     int size() const;

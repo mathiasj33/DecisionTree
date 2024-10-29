@@ -9,7 +9,7 @@
 #include <fstream>
 #include <boost/algorithm/string.hpp>
 
-LoadedDataset::LoadedDataset(std::string path) {
+LoadedDataset::LoadedDataset(const std::string& path) {
     std::ifstream infile(path);
     if(infile.is_open()) {
         std::string line;

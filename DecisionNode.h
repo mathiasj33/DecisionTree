@@ -14,7 +14,7 @@
 class DecisionNode {
 public:
     void train(const Dataset& dataset, std::vector<std::string> features, int depth, int maxDepth, int numFeatures);
-    std::vector<std::unique_ptr<DecisionNode>>& getChildren();
+    std::vector<DecisionNode>& getChildren();
     std::vector<int> getFeatureValues() const;
     std::string getSplitFeature() const;
     int getLabel() const;
@@ -22,7 +22,7 @@ public:
 
 private:
     std::pair<std::string, float> calculateBestSplit(const Dataset& dataset, std::vector<std::string> consideredFeatures);
-    std::vector<std::unique_ptr<DecisionNode>> children;
+    std::vector<DecisionNode> children;
     std::vector<int> featureValues;
     std::string splitFeature;
     int label;

@@ -11,8 +11,8 @@
 
 class DataItem {
 public:
-    void setFeature(std::string feature, int value);
-    int getFeature(std::string feature) const;
+    void setFeature(const std::string& feature, int value);
+    int getFeature(const std::string& feature) const;
     std::vector<std::string> getFeatures() const;
 private:
     std::unordered_map<std::string, int> features;

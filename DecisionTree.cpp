@@ -22,16 +22,16 @@ int DecisionTree::classify(const DataItem* item) {
     while(!node->getChildren().empty()) {
         bool foundChild = false;
         for(int i = 0; i < node->getChildren().size(); i++) {
-            int value = node->getChildren()[i]->getPrevSplitValue();
+            int value = node->getChildren()[i].getPrevSplitValue();
             if(value == item->getFeature(node->getSplitFeature())) {
-                node = node->getChildren()[i].get();
+                node = &node->getChildren()[i];
                 foundChild = true;
                 break;
             }
         }
         if(!foundChild) {
             //randomly use the first child
-            node = node->getChildren()[0].get();
+            node = &node->getChildren()[0];
         }
     }
     return node->getLabel();

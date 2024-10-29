@@ -11,7 +11,7 @@
 
 class LoadedDataset {
 public:
-    explicit LoadedDataset(std::string path);
+    explicit LoadedDataset(const std::string& path);
     std::vector<int>& getLabels();
     std::vector<DataItem>::const_iterator begin() const;
     std::vector<DataItem>::const_iterator end() const;

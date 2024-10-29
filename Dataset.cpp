@@ -61,19 +61,19 @@ bool Dataset::allSameLabel() const {
     return true;
 }
 
-std::unique_ptr<std::vector<Dataset>> Dataset::splitOnFeature(std::string feature) const {
+std::vector<Dataset> Dataset::splitOnFeature(const std::string& feature) const {
     std::unordered_map<int, int> valueToPos;
-    auto datasets = std::make_unique<std::vector<Dataset>>();
+    auto datasets = std::vector<Dataset>();
     for(int i = 0; i < data.size(); i++) {
         const DataItem* item = data[i];
         const int* label = labels[i];
         int value = item->getFeature(feature);
         if(valueToPos.find(value) == valueToPos.end()) {
             Dataset ds;
-            datasets->push_back(ds);
-            valueToPos[value] = (int) datasets->size() - 1;
+            datasets.push_back(ds);
+            valueToPos[value] = (int) datasets.size() - 1;
         }
-        (*datasets)[valueToPos[value]].add(item, label);
+        datasets[valueToPos[value]].add(item, label);
     }
     return datasets;
 }

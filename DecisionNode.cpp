@@ -4,6 +4,7 @@
 
 #include "DecisionNode.h"
 #include <algorithm>
+#include <random>
 
 void DecisionNode::train(const Dataset &dataset, std::vector<std::string> features, int depth, int maxDepth,
                          int numFeatures) {
@@ -30,14 +31,14 @@ void DecisionNode::train(const Dataset &dataset, std::vector<std::string> featur
     splitFeature = bestSplitGini.first;
     auto newFeatures = features;
     newFeatures.erase(std::remove(newFeatures.begin(), newFeatures.end(), splitFeature), newFeatures.end());
-    auto splits = *dataset.splitOnFeature(splitFeature);
+    auto splits = dataset.splitOnFeature(splitFeature);
 
     #pragma omp parallel for
     for (int i = 0; i < splits.size(); i++) {
         Dataset subset = splits[i];
-        auto child = std::make_unique<DecisionNode>();
-        child->prevSplitValue = subset.getData()[0]->getFeature(splitFeature);
-        child->train(subset, newFeatures, depth + 1, maxDepth, numFeatures);
+        auto child = DecisionNode();
+        child.prevSplitValue = subset.getData()[0]->getFeature(splitFeature);
+        child.train(subset, newFeatures, depth + 1, maxDepth, numFeatures);
         children.push_back(std::move(child));
     }
 }
@@ -49,7 +50,7 @@ DecisionNode::calculateBestSplit(const Dataset &dataset, std::vector<std::string
     for (const std::string &f : consideredFeatures) {
         auto splits = dataset.splitOnFeature(f);
         float splitGini = 0;
-        for (const auto &set : *splits) {
+        for (const auto &set : splits) {
             splitGini += (((float) set.size()) / dataset.size()) * set.calculateGiniIndex();
         }
         if (splitGini < gini) {
@@ -60,7 +61,7 @@ DecisionNode::calculateBestSplit(const Dataset &dataset, std::vector<std::string
     return std::make_pair<>(feature, gini);
 }
 
-std::vector<std::unique_ptr<DecisionNode>> &DecisionNode::getChildren() {
+std::vector<DecisionNode> &DecisionNode::getChildren() {
     return children;
 }
 
